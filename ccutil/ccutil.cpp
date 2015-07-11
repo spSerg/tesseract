@@ -7,7 +7,7 @@ namespace tesseract {
 CCUtil::CCUtil() :
   params_(),
   STRING_INIT_MEMBER(m_data_sub_dir,
-                     "tessdata/", "Directory for data files", &params_),
+                     "./", "Directory for data files", &params_), // changed by spSerg 11-07-2013
 #ifdef _WIN32
   STRING_INIT_MEMBER(tessedit_module_name, WINDLLNAME,
                      "Module colocated with tessdata dir", &params_),

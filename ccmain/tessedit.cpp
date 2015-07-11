@@ -91,7 +91,7 @@ bool Tesseract::init_tesseract_lang_data(
   lang = language != NULL ? language : "eng";
   language_data_path_prefix = datadir;
   language_data_path_prefix += lang;
-  language_data_path_prefix += ".";
+  language_data_path_prefix += "_";  // changed by spSerg 11-07-2013
 
   // Initialize TessdataManager.
   STRING tessdata_path = language_data_path_prefix + kTrainedDataSuffix;
