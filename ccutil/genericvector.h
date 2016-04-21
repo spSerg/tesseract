@@ -358,11 +358,11 @@ inline bool LoadDataFromFile(const STRING& filename,
   FILE* fp = fopen(filename.string(), "rb");
   if (fp == NULL) return false;
   fseek(fp, 0, SEEK_END);
-  size_t size = ftell(fp);
+  long size = ftell(fp);
   fseek(fp, 0, SEEK_SET);
   // Pad with a 0, just in case we treat the result as a string.
   data->init_to_size(size + 1, 0);
-  bool result = fread(&(*data)[0], 1, size, fp) == size;
+  bool result = fread(&(*data)[0], 1, size, fp) == (size_t)size;
   fclose(fp);
   return result;
 }

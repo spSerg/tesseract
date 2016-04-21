@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "allheaders.h"
 #include "pix.h"
-#ifdef USE_OPENCL
+#if defined(USE_OPENCL) && HAVE_LIBTIFF
 #include "tiff.h"
 #include "tiffio.h"
 #endif
@@ -261,6 +261,7 @@ public:
     static int WriteBinaryToFile( const char* fileName, const char* birary, size_t numBytes );
     static int BinaryGenerated( const char * clFileName, FILE ** fhandle );
     //static int CompileKernelFile( const char *filename, GPUEnv *gpuInfo, const char *buildOption );
+#if HAVE_LIBTIFF
     static l_uint32* pixReadFromTiffKernel(l_uint32 *tiffdata,l_int32 w,l_int32 h,l_int32 wpl, l_uint32 *line);
     static Pix* pixReadTiffCl( const char *filename, l_int32 n );
     static PIX * pixReadStreamTiffCl ( FILE *fp, l_int32 n );
@@ -269,7 +270,7 @@ public:
     static int composeRGBPixelCl(int *tiffdata,int *line,int h,int w);
     static l_int32 getTiffStreamResolutionCl(TIFF *tif,l_int32  *pxres,l_int32  *pyres);
     static TIFF* fopenTiffCl(FILE *fp,const char  *modestring);
-
+#endif //HAVE_LIBTIFF
 /* OpenCL implementations of Morphological operations*/
     
     //Initialiation of OCL buffers used in Morph operations

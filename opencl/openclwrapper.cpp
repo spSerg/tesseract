@@ -980,6 +980,7 @@ PERF_COUNT_END
     return 1;
 }
 
+#if HAVE_LIBTIFF
 l_uint32* OpenclDevice::pixReadFromTiffKernel(l_uint32 *tiffdata,l_int32 w,l_int32 h,l_int32 wpl,l_uint32 *line)
 {
 PERF_COUNT_START("pixReadFromTiffKernel")
@@ -1615,6 +1616,8 @@ PIXCMAP   *cmap;
 
     return pix;
 }
+#endif // HAVE_LIBTIFF
+
 
 //Morphology Dilate operation for 5x5 structuring element. Invokes the relevant OpenCL kernels
 cl_int
@@ -2812,7 +2815,7 @@ PERF_COUNT_START("ThresholdRectToPixOCL")
     // USE_HOST_PTR uses onion+ bus which is slowest option; also happens to be coherent which we don't need.
     // faster option would be to allocate initial image buffer
     // using a garlic bus memory type
-    cl_mem imageBuffer = clCreateBuffer( rEnv.mpkContext, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, width*height*bytes_per_pixel*sizeof(char), (void *)imageData, &clStatus );
+	cl_mem imageBuffer = clCreateBuffer( rEnv.mpkContext, CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR, width*height*bytes_per_pixel*sizeof(char), (void *)imageData, &clStatus );
     CHECK_OPENCL( clStatus, "clCreateBuffer imageBuffer");
 
     /* map pix as write only */
@@ -3004,7 +3007,10 @@ double composeRGBPixelMicroBench( GPUEnv *env, TessScoreEvaluationInputData inpu
 
         OpenclDevice::gpuEnv = *env;
         int wpl = pixGetWpl(input.pix);
+#if HAVE_LIBTIFF
         OpenclDevice::pixReadFromTiffKernel(tiffdata, input.width, input.height, wpl, NULL);
+#endif // HAVE_LIBTIFF
+
 #if ON_WINDOWS
         QueryPerformanceCounter(&time_funct_end);
         time = (time_funct_end.QuadPart-time_funct_start.QuadPart)/(double)(freq.QuadPart);

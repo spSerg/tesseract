@@ -752,6 +752,9 @@ void TextlineProjection::TransformToPixCoords(const DENORM* denorm,
 }
 
 // Helper truncates the TPOINT to be within the pix_.
+#if _MSC_VER < 1900
+__declspec(noinline) // previous versions of the compiler inline this function incorrectly
+#endif
 void TextlineProjection::TruncateToImageBounds(TPOINT* pt) const {
   pt->x = ClipToRange<int>(pt->x, 0, pixGetWidth(pix_) - 1);
   pt->y = ClipToRange<int>(pt->y, 0, pixGetHeight(pix_) - 1);

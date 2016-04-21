@@ -1038,14 +1038,14 @@ bool TessBaseAPI::ProcessPagesMultipageTiff(const l_uint8 *data,
   for (; ; ++page) {
     if (tessedit_page_number >= 0)
       page = tessedit_page_number;
-#ifdef USE_OPENCL
+#if defined(USE_OPENCL) && HAVE_LIBTIFF
     if ( od.selectedDeviceIsOpenCL() ) {
       // FIXME(jbreiden) Not implemented.
       pix = od.pixReadMemTiffCl(data, size, page);
     } else {
 #endif
       pix = pixReadMemTiff(data, size, page);
-#ifdef USE_OPENCL
+#if defined(USE_OPENCL) && HAVE_LIBTIFF
     }
 #endif
     if (pix == NULL) break;
