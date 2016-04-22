@@ -22,11 +22,11 @@
 #include "config_auto.h"
 #endif
 
-#ifdef MINGW
+#if (defined MINGW) || (defined __CYGWIN__)
 // workaround for stdlib.h and putenv
 #undef __STRICT_ANSI__
 #include "strcasestr.h"
-#endif  // MINGW
+#endif  // MINGW/Cygwin
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -217,7 +217,7 @@ bool PangoFontInfo::ParseFontDescription(const PangoFontDescription *desc) {
                    == PANGO_VARIANT_SMALL_CAPS);
 
   is_bold_ = (pango_font_description_get_weight(desc) >= PANGO_WEIGHT_BOLD);
-  // We dont have a way to detect whether a font is of type Fraktur. The fonts
+  // We don't have a way to detect whether a font is of type Fraktur. The fonts
   // we currently use all have "Fraktur" in their family name, so we do a
   // fragile but functional check for that here.
   is_fraktur_ = (strcasestr(family, "Fraktur") != NULL);
@@ -534,7 +534,7 @@ bool FontUtils::IsAvailableFont(const char* input_query_desc,
        pango_font_description_get_weight(selected_desc));
 
   char* selected_desc_str = pango_font_description_to_string(selected_desc);
-  tlog(2, "query_desc: '%s' Selected: 's'\n", query_desc.c_str(),
+  tlog(2, "query_desc: '%s' Selected: '%s'\n", query_desc.c_str(),
        selected_desc_str);
   if (!equal && best_match != NULL) {
     *best_match = selected_desc_str;
